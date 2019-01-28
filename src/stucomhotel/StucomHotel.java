@@ -6,11 +6,17 @@
 package stucomhotel;
 
 import controller.Manager;
+import tools.Tools;
+import exceptions.InputException;
+import exceptions.ManagerException;
 import exceptions.PersistenceException;
 import exceptions.StucomHotelException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import model_enum.Services;
+import model_enum.Skills;
 
 /**
  *
@@ -42,12 +48,16 @@ public class StucomHotel {
                     if (command.length > 0) {
                         exit = checkCommand(command);
                     } else {
-                        throw new StucomHotelException(StucomHotelException.WRONG_COMMAND);
+                        throw new InputException(InputException.WRONG_COMMAND);
                     }
-                } catch (StucomHotelException ex) {
+                } catch (InputException ex) {
                     System.out.println(ex.getMessage());
                 } catch (IOException ex) {
                     throw new PersistenceException("Fatal error: " + ex.getMessage());
+                } catch (ManagerException ex) {
+                    System.out.println(ex.getMessage());
+                } catch (StucomHotelException ex) {
+                    System.out.println(ex.getMessage());
                 }
             }
         } catch (PersistenceException ex) {
@@ -61,14 +71,14 @@ public class StucomHotel {
      * @return
      * @throws StucomHotelException
      */
-    private static boolean checkCommand(String[] command) throws StucomHotelException {
+    private static boolean checkCommand(String[] command) throws InputException, ManagerException, StucomHotelException {
         String commandUser = command[0];
         switch (commandUser.toUpperCase()) {
             case "ROOM":
-                commandCreation(command);
+                creationRoom(command);
                 break;
             case "WORKER":
-                commandCreation(command);
+                creationWorker(command);
                 break;
             case "RESERVATION":
 
@@ -90,44 +100,54 @@ public class StucomHotel {
             case "EXIT":
                 return exit(command);
             default:
-                throw new StucomHotelException(StucomHotelException.WRONG_COMMAND);
+                throw new InputException(InputException.WRONG_COMMAND);
         }
         return false;
     }
 
-    private static void commandCreation(String[] command) throws StucomHotelException {
-        
+    private static void creationRoom(String[] command) throws InputException, ManagerException, StucomHotelException {
+        HashSet<Services> servicesRoom = new HashSet();
         if (command.length == 4) {
-            String typeCommand = command[0];
-            if(typeCommand.equalsIgnoreCase("ROOM")){
-                
-            }
-            
-        }else {
-                throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
-            }
-    }
 
-    private static boolean showMoney() {
-        int money = manager.getMoney();
-        if (money > 0) {
-            System.out.println("=======================================================");
-            System.out.println("==>   MONEY : " + money + " €   <==");
-            System.out.println("=======================================================");
-            return false;
+            String[] servicesCommand = command[3].split(",");
+            for (String service : servicesCommand) {
+                if (manager.checkServiceRoomExist(service)) {
+                    Services serviceCommand = Tools.converStringToEnumService(service);
+                    servicesRoom.add(serviceCommand);
+                }
+            }
+            manager.createRoom(command[1], Tools.convertStringToNumber(command[2]), servicesRoom);
+            System.out.println("--> new Room added " + command[1] + " <--");
+
         } else {
-            System.out.println("=======================================================");
-            System.out.println("==========    YOU´VE LOST ALL YOUR MONEY    ===========");
-            System.out.println("=======================================================");
-            return true;
+            throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
+
     }
 
-    private static boolean money(String[] command) throws StucomHotelException {
-        if (command.length == 1) {
-            return showMoney();
+    private static void creationWorker(String[] command) throws InputException, ManagerException, StucomHotelException {
+        HashSet<Skills> skillsWorker = new HashSet();
+        if (command.length == 4) {
+            String[] skillsCommand = command[3].split(",");
+            for (String skill : skillsCommand) {
+                if (manager.checkServiceRoomExist(skill)) {
+                    Skills serviceCommand = Tools.converStringToEnumSkill(skill);
+                    skillsWorker.add(serviceCommand);
+                }
+            }
+            manager.createWorker(command[1], command[2], skillsWorker);
+            System.out.println("--> new Worker added " + command[1] + " <--");
+        } else {
+            throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
-        throw new StucomHotelException(StucomHotelException.WRONG_NUMBER_ARGUMENTS);
+
+    }
+
+    private static boolean money(String[] command) throws InputException {
+        if (command.length == 1) {
+            return manager.showMoney();
+        }
+        throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
     }
 
     /**
@@ -136,10 +156,10 @@ public class StucomHotel {
      * @return
      * @throws StucomHotelException
      */
-    private static boolean exit(String[] command) throws StucomHotelException {
+    private static boolean exit(String[] command) throws InputException {
         if (command.length == 1) {
             return true;
         }
-        throw new StucomHotelException(StucomHotelException.WRONG_NUMBER_ARGUMENTS);
+        throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
     }
 }

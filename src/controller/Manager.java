@@ -95,35 +95,31 @@ public class Manager {
         return newCustomer;
     }
 
-    public void createReservation(int countReservation, String dni, int numberPerson, HashSet<Services> services, HashSet<Customer> customers, HashSet<Room> rooms) throws ManagerException {
+    public void createReservation(int countReservation, String dni, int numberPerson, HashSet<Services> services) throws ManagerException {
         Customer reservationCustomer;
         Room roomAvailable;
-        if (checkCustomer(dni, customers) != null) {
-            reservationCustomer = checkCustomer(dni, customers);
+        if (checkCustomer(dni) != null) {
+            reservationCustomer = checkCustomer(dni);
         } else {
             reservationCustomer = createCustomer(dni);
         }
 
-        if (checkFreeRoom(services, rooms, numberPerson) != null) {
-            roomAvailable = checkFreeRoom(services, rooms, numberPerson);
+        if (checkFreeRoom(services, numberPerson) != null) {
+            roomAvailable = checkFreeRoom(services, numberPerson);
             reservations.put((Integer) countReservation, new Reservation(countReservation, reservationCustomer, roomAvailable, services, numberPerson));
         } else {
-            throw new ManagerException(ManagerException.ROOM_AVAILABLE);
+            throw new ManagerException(ManagerException.ROOM_NOT_AVAILABLE);
         }
-
+        countReservation++;
     }
 
-    private Room checkFreeRoom(HashSet<Services> services, HashSet<Room> rooms, int numberPersons) {
+    private Room checkFreeRoom(HashSet<Services> services, int numberPersons) {
         ArrayList<Room> roomsFrees = new ArrayList<>();
         Room roomFreeAvailable = null;
         boolean containService = false;
-        for (Room room : rooms) {
+        for (Room room : rooms.values()) {
             for (Services service : services) {
-                if (room.getServices().contains(service)) {
-                    containService = true;
-                } else {
-                    containService = false;
-                }
+                containService = room.getServices().contains(service);
             }
 
             if (containService && room.getCapacity() == numberPersons) {
@@ -136,13 +132,70 @@ public class Manager {
         return roomFreeAvailable;
     }
 
-    private Customer checkCustomer(String dni, HashSet<Customer> customers) {
+    private Customer checkCustomer(String dni) {
         Customer checkCustomer = null;
-        for (Customer customer : customers) {
+        for (Customer customer : customers.values()) {
             if (customer.getDNI().equalsIgnoreCase(dni)) {
                 checkCustomer = customer;
             }
         }
         return checkCustomer;
     }
+//
+//    public Room checkRoom(String numberRoom) {
+//        Room roomExist = null;
+//        for (Room room : rooms.values()) {
+//            if (room.getNumber().equalsIgnoreCase(numberRoom)) {
+//                roomExist = room;
+//            }
+//        }
+//        return roomExist;
+//    }
+//
+//    public Worker checkWorker(String nameWorker, String dniWorker) {
+//        Worker workerExist = null;
+//        for (Worker worker : workers.values()) {
+//            if (worker.getDNI().equalsIgnoreCase(dniWorker) && worker.getName().equalsIgnoreCase(nameWorker)) {
+//                workerExist = worker;
+//            }
+//        }
+//        return workerExist;
+//    }
+
+    public boolean checkServiceRoomExist(String newServiceRoom) throws StucomHotelException {
+        boolean serviceExistApp = false;
+        if (Services.valueOf(newServiceRoom) != null) {
+            serviceExistApp = true;
+        } else {
+            throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
+        }
+
+        return serviceExistApp;
+    }
+
+    public boolean checkSkillExist(String skillWorker) throws StucomHotelException {
+        boolean skillWorkerExist = false;
+        if (Skills.valueOf(skillWorker) != null) {
+            skillWorkerExist = true;
+        } else {
+            throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
+        }
+        return skillWorkerExist;
+    }
+
+    public boolean showMoney() {
+        int moneyApp = getMoney();
+        if (moneyApp > 0) {
+            System.out.println("=======================================================");
+            System.out.println("==>   MONEY : " + moneyApp + " €   <==");
+            System.out.println("=======================================================");
+            return false;
+        } else {
+            System.out.println("=======================================================");
+            System.out.println("==========    YOU´VE LOST ALL YOUR MONEY    ===========");
+            System.out.println("=======================================================");
+            return true;
+        }
+    }
+
 }

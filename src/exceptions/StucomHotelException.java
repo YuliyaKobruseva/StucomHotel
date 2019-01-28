@@ -16,15 +16,14 @@ public class StucomHotelException extends CodeException{
     
      // StucomHotelException codes
     public static final int WRONG_SERVICE = 0;
-    public static final int WRONG_NUMBER_ARGUMENTS = 1;
-    public static final int WRONG_COMMAND= 2;
+    
+    
     
 
     // StucomHotelException messages
     private final List<String> messages = Arrays.asList(
             "<[ Wrong service ]>",
-            "<[ Wrong number of arguments ]>",
-            "<[ Wrong command ]>");
+            "<[ Wrong number of arguments ]>");
 
     public StucomHotelException(int code) {
         super(code);

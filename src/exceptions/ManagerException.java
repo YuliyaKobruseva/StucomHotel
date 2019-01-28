@@ -18,14 +18,14 @@ public class ManagerException extends CodeException {
     public static final int ROOM_EXIST = 0;
     public static final int WORKER_EXIST = 1;
     public static final int CUSTOMER_EXIST = 2;
-    public static final int ROOM_AVAILABLE = 3;
+    public static final int ROOM_NOT_AVAILABLE = 3;
 
     // ManagerException messages
     private final List<String> messages = Arrays.asList(
             "<[ Room already exist ]>",
             "<[ Worker already exist ]>",
             "<[ Customer already exist ]>",
-            "<[ There isn´t any room available. Customer not asigned. You´ve lost 50€ ]>");
+            "<[ There isn´t any room available. Customer not asigned. You´ve lost 100€ ]>");
 
     public ManagerException(int code) {
         super(code);

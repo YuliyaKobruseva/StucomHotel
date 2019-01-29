@@ -2,6 +2,7 @@ package exceptions;
 
 import java.util.Arrays;
 import java.util.List;
+import model_enum.Colors;
 
 /**
  * Exception of problems with commands

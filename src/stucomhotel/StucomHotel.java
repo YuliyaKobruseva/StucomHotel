@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import model_enum.Colors;
 import model_enum.Services;
 import model_enum.Skills;
 
@@ -35,10 +36,11 @@ public class StucomHotel {
             boolean exit = false;
             manager = new Manager();
             manager.setMoney(1000);
-
             try {
                 manager.initData();
             } catch (StucomHotelException ex) {
+                System.out.println(ex.getMessage());
+            } catch (InputException ex) {
                 System.out.println(ex.getMessage());
             }
             while (!exit) {
@@ -84,7 +86,7 @@ public class StucomHotel {
 
                 break;
             case "HOTEL":
-
+                hotel(command);
                 break;
             case "PROBLEM":
 
@@ -92,6 +94,7 @@ public class StucomHotel {
             case "REQUEST":
                 break;
             case "FINISH":
+                finishService(command);
                 break;
             case "LEAVE":
                 break;
@@ -107,8 +110,15 @@ public class StucomHotel {
 
     private static void creationRoom(String[] command) throws InputException, ManagerException, StucomHotelException {
         HashSet<Services> servicesRoom = new HashSet();
+        String numberRoom;
         if (command.length == 4) {
-
+            if (Tools.convertStringToNumber(command[1]) < 10 && Tools.convertStringToNumber(command[1]) > 0) {
+                numberRoom = "00" + command[1];
+            } else if (Tools.convertStringToNumber(command[1]) > 10 && Tools.convertStringToNumber(command[1]) < 100) {
+                numberRoom = "0" + command[1];
+            } else {
+                throw new InputException(InputException.WRONG_DATA);
+            }
             String[] servicesCommand = command[3].split(",");
             for (String service : servicesCommand) {
                 if (manager.checkServiceRoomExist(service)) {
@@ -116,13 +126,10 @@ public class StucomHotel {
                     servicesRoom.add(serviceCommand);
                 }
             }
-            manager.createRoom(command[1], Tools.convertStringToNumber(command[2]), servicesRoom);
-            System.out.println("--> new Room added " + command[1] + " <--");
-
         } else {
             throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
-
+        manager.createRoom(command[1], Tools.convertStringToNumber(command[2]), servicesRoom);
     }
 
     private static void creationWorker(String[] command) throws InputException, ManagerException, StucomHotelException {
@@ -135,12 +142,26 @@ public class StucomHotel {
                     skillsWorker.add(serviceCommand);
                 }
             }
-            manager.createWorker(command[1], command[2], skillsWorker);
-            System.out.println("--> new Worker added " + command[1] + " <--");
         } else {
             throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
+        manager.createWorker(command[1], command[2], skillsWorker);
+    }
 
+    private static void hotel(String[] command) throws InputException {
+        if (command.length == 1) {
+            manager.showDataOfRoomsAndWorkers();
+        } else {
+            throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
+        }
+    }
+
+    private static void finishService(String[] command) throws InputException {
+        if (command.length == 2) {
+            manager.finishServicesRoom(command[1]);
+        } else {
+            throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
+        }
     }
 
     private static boolean money(String[] command) throws InputException {

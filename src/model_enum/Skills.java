@@ -16,5 +16,5 @@ public enum Skills {
     SPA, 
     BAR, 
     COMIDA,
-    LAVANDERÍA;
+    LAVANDERIA;
 }

@@ -12,24 +12,22 @@ import java.util.List;
  *
  * @author Yuli
  */
-public class StucomHotelException extends CodeException{
-    
-     // StucomHotelException codes
+public class StucomHotelException extends CodeException {
+
+    // StucomHotelException codes
     public static final int WRONG_SERVICE = 0;
-    
-    
-    
+    public static final int WRONG_SKILL = 1;
 
     // StucomHotelException messages
     private final List<String> messages = Arrays.asList(
-            "<[ Wrong service ]>",
-            "<[ Wrong number of arguments ]>");
+            "[ Wrong service ]",
+            "[ Wrong skill ]");
 
     public StucomHotelException(int code) {
         super(code);
     }
-    
-     @Override
+
+    @Override
     public String getMessage() {
         return messages.get(getCode());
     }

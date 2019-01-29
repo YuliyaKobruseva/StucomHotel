@@ -17,17 +17,8 @@ public class Room {
 
     private final String number;
     private final int capacity;
-    private Conditions condition;
     private final HashSet<Services> services;
-
-    /**
-     * Get the value of services
-     *
-     * @return the value of services
-     */
-    public HashSet<Services> getServices() {
-        return services;
-    }
+    private Conditions condition;
 
     /**
      * Get the value of condition
@@ -36,6 +27,24 @@ public class Room {
      */
     public Conditions getCondition() {
         return condition;
+    }
+
+    /**
+     * Set the value of condition
+     *
+     * @param condition new value of condition
+     */
+    public void setCondition(Conditions condition) {
+        this.condition = condition;
+    }
+
+    /**
+     * Get the value of services
+     *
+     * @return the value of services
+     */
+    public HashSet<Services> getServices() {
+        return services;
     }
 
     /**

@@ -6,6 +6,7 @@
 package model.person;
 
 import java.util.HashSet;
+import model.room.Room;
 import model_enum.Skills;
 
 /**
@@ -16,6 +17,34 @@ public class Worker extends Person {
 
     private String name;
     private HashSet<Skills> skills;
+    private Room numberRoom;
+
+    /**
+     * Get the value of numberRoom
+     *
+     * @return the value of numberRoom
+     */
+    public Room getNumberRoom() {
+        return numberRoom;
+    }
+
+    /**
+     * Set the value of numberRoom
+     *
+     * @param numberRoom new value of numberRoom
+     */
+    public void setNumberRoom(Room numberRoom) {
+        this.numberRoom = numberRoom;
+    }
+    
+      /**
+     * Set the value of numberRoom
+     *
+     */
+    public void setNumberRoom() {
+        this.numberRoom = null;
+    }
+    
 
     /**
      * Get the value of skills
@@ -57,6 +86,7 @@ public class Worker extends Person {
         super(DNI);
         this.name = name;
         this.skills = skills;
+        this.numberRoom = null;
     }
 
 }

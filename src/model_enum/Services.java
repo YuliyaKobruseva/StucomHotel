@@ -15,8 +15,8 @@ public enum Services {
     CAMADOBLE,
     JACUZZI,
     MINIBAR,
-    TELÉFONO,
-    SATÉLITE,
+    TELEFONO,
+    SATELITE,
+    SWEET,
     SUITE;
-   
 }

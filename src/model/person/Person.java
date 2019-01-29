@@ -14,25 +14,6 @@ import model.room.Room;
 public abstract class Person {
 
     private final String DNI;
-    private Room numberRoom;
-
-    /**
-     * Get the value of numberRoom
-     *
-     * @return the value of numberRoom
-     */
-    public Room getNumberRoom() {
-        return numberRoom;
-    }
-
-    /**
-     * Set the value of numberRoom
-     *
-     * @param numberRoom new value of numberRoom
-     */
-    public void setNumberRoom(Room numberRoom) {
-        this.numberRoom = numberRoom;
-    }
 
     /**
      * Get the value of DNI

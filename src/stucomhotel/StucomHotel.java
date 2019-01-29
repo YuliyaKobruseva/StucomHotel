@@ -97,7 +97,7 @@ public class StucomHotel {
                 finishService(command);
                 break;
             case "LEAVE":
-                break;
+                return leaveHotel(command);
             case "MONEY":
                 return money(command);
             case "EXIT":
@@ -156,12 +156,21 @@ public class StucomHotel {
         }
     }
 
-    private static void finishService(String[] command) throws InputException {
+    private static void finishService(String[] command) throws InputException, ManagerException {
         if (command.length == 2) {
             manager.finishServicesRoom(command[1]);
         } else {
             throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
+    }
+
+    private static boolean leaveHotel(String[] command) throws InputException, ManagerException {
+        if (command.length == 3) {
+            return manager.leaveRoom(command[1], Tools.convertStringToNumber(command[2]));
+        } else {
+            throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
+        }
+
     }
 
     private static boolean money(String[] command) throws InputException {

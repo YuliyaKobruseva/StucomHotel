@@ -19,8 +19,27 @@ public class Reservation {
     private final int numberReservation;
     private final Customer customer;
     private final Room room;
-    private HashSet<Services> requests;    
+    private final HashSet<Services> requests;
     private final int numberPerson;
+    private int additionalRequest;
+
+    /**
+     * Get the value of additionalRequest
+     *
+     * @return the value of additionalRequest
+     */
+    public int getAdditionalRequest() {
+        return additionalRequest;
+    }
+
+    /**
+     * Set the value of additionalRequest
+     *
+     * @param additionalRequest new value of additionalRequest
+     */
+    public void setAdditionalRequest(int additionalRequest) {
+        this.additionalRequest = additionalRequest;
+    }
 
     /**
      * Get the value of numberPerson
@@ -30,7 +49,6 @@ public class Reservation {
     public int getNumberPerson() {
         return numberPerson;
     }
-
 
     /**
      * Get the value of numberReservation
@@ -46,7 +64,8 @@ public class Reservation {
         this.customer = customer;
         this.room = room;
         this.requests = requests;
-        this.numberPerson=numberPerson;
+        this.numberPerson = numberPerson;
+        this.additionalRequest = 0;
     }
 
     /**
@@ -56,15 +75,6 @@ public class Reservation {
      */
     public HashSet<Services> getRequests() {
         return requests;
-    }
-
-    /**
-     * Set the value of requests
-     *
-     * @param requests new value of requests
-     */
-    public void setRequests(HashSet<Services> requests) {
-        this.requests = requests;
     }
 
     /**

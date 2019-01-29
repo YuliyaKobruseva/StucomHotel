@@ -123,25 +123,58 @@ public class Manager {
 
     public void finishServicesRoom(String numberRoom) throws ManagerException {
         if (rooms.get(numberRoom) != null) {
-            Room roomForFinish = rooms.get(numberRoom);
-            reservations.values().forEach((numReservation) -> {
-                if (rooms.get(numberRoom).getNumber().equalsIgnoreCase(numReservation.getRoom().getNumber())) {
-                    roomForFinish.setCondition(Conditions.RESERVED);
-                } else {
-                    roomForFinish.setCondition(Conditions.CLEAN);
-                }
-            }); //cambiar si pasa si nay trabajadores en habitacion
-            for (Worker workerInRoom : workers.values()) {
+            workers.values().forEach((Worker workerInRoom) -> {
                 if (workerInRoom.getNumberRoom().getNumber().equalsIgnoreCase(numberRoom)) {
+                    Room roomForFinish = rooms.get(numberRoom);
+                    reservations.values().forEach((numReservation) -> {
+                        if (rooms.get(numberRoom).getNumber().equalsIgnoreCase(numReservation.getRoom().getNumber())) {
+                            roomForFinish.setCondition(Conditions.RESERVED);
+                        } else {
+                            roomForFinish.setCondition(Conditions.CLEAN);
+                        }
+                    });
                     workerInRoom.setNumberRoom();
                     System.out.println("Services finished in room: " + numberRoom);
                 } else {
                     System.out.println("There aren´t workers in room");
                 }
-            }
+            });
         } else {
             throw new ManagerException(ManagerException.ROOM_NOT_EXIST);
         }
+    }
+
+    public boolean leaveRoom(String numberRoom, int money) throws ManagerException {
+        Room roomCustomer = null;
+        int numberCustomerRequest = 0;
+        ArrayList<Worker> workersInRoom = new ArrayList<>();
+        for (Reservation reservation : reservations.values()) {
+            if (reservation.getRoom().getNumber().equalsIgnoreCase(numberRoom)) {
+                roomCustomer = reservation.getRoom();
+                numberCustomerRequest = reservation.getAdditionalRequest();
+            }
+        }
+        if (roomCustomer != null) {
+            for (Worker workerInRoom : workers.values()) {
+                if (workerInRoom.getNumberRoom().getNumber().equalsIgnoreCase(numberRoom)) {
+                    workersInRoom.add(workerInRoom);
+                    workerInRoom.setNumberRoom();
+                }
+            }
+            roomCustomer.setCondition(Conditions.UNCLEAN);
+        } else {
+            throw new ManagerException(ManagerException.ROOM_NOT_EXIST);
+        }
+        System.out.println(Colors.BLUE + "-> Room " + numberRoom + " free and set to " + Conditions.UNCLEAN + " <--");
+        if (workersInRoom.size() == numberCustomerRequest) {
+            System.out.println("--> Satisfaed clients. You win " + money + "€ <--" + Colors.RESET);
+            setMoney(getMoney() + money);
+        } else if (workersInRoom.size() < numberCustomerRequest) {
+            System.out.println("--> Unsatisfaed clients. You loose " + money + "€ <--" + Colors.RESET);
+            setMoney(getMoney() - money);
+            return messageLooseAllMoney(getMoney());
+        }
+        return false;
     }
 
     public void showDataOfRoomsAndWorkers() {
@@ -194,7 +227,7 @@ public class Manager {
                 containService = room.getServices().contains(service);
             }
 
-            if (containService && room.getCapacity() == numberPersons) {
+            if (containService && room.getCapacity() >= numberPersons) {
                 roomsFrees.add(room);
             }
         }
@@ -228,11 +261,17 @@ public class Manager {
             System.out.println("=======================================================");
             return false;
         } else {
-            System.out.println("=======================================================");
-            System.out.println("==========    YOU´VE LOST ALL YOUR MONEY    ===========");
-            System.out.println("=======================================================");
-            return true;
+            return messageLooseAllMoney(moneyApp);
+
         }
     }
 
+    private boolean messageLooseAllMoney(int money) {
+        if (money < 0) {
+            System.out.println("=======================================================");
+            System.out.println("==========    YOU´VE LOST ALL YOUR MONEY    ===========");
+            System.out.println("=======================================================");
+        }
+        return true;
+    }
 }

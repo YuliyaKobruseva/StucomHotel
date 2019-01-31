@@ -18,9 +18,9 @@ public class InputException extends CodeException {
 
     // Exception messages
     private final List<String> messages = Arrays.asList(
-            "<[ Wrong command ]>",
-            "<[ Wrong number of arguments ]>",
-            "<[ Incorrect data ]>");
+            "[ Wrong command ]",
+            "[ Wrong number of arguments ]",
+            "[ Incorrect data ]");
 
     public InputException(int code) {
         super(code);

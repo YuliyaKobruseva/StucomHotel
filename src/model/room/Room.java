@@ -13,7 +13,7 @@ import model_enum.Conditions;
  *
  * @author Yuli
  */
-public class Room {
+public class Room implements Comparable<Room> {
 
     private final String number;
     private final int capacity;
@@ -70,6 +70,11 @@ public class Room {
         this.capacity = capacity;
         this.services = services;
         this.condition = Conditions.CLEAN;
+    }
+
+    @Override
+    public int compareTo(Room room) {
+        return Integer.compare(this.capacity, room.capacity);
     }
 
 }

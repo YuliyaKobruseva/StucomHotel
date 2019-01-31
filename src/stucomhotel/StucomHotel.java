@@ -39,9 +39,9 @@ public class StucomHotel {
             try {
                 manager.initData();
             } catch (StucomHotelException ex) {
-                System.out.println(ex.getMessage());
+                System.out.println(Colors.RED+ex.getMessage()+Colors.RESET);
             } catch (InputException ex) {
-                System.out.println(ex.getMessage());
+                System.out.println(Colors.RED+ex.getMessage()+Colors.RESET);
             }
             while (!exit) {
                 try {
@@ -53,17 +53,17 @@ public class StucomHotel {
                         throw new InputException(InputException.WRONG_COMMAND);
                     }
                 } catch (InputException ex) {
-                    System.out.println(ex.getMessage());
+                    System.out.println(Colors.RED + ex.getMessage() + Colors.RESET);
                 } catch (IOException ex) {
-                    throw new PersistenceException("Fatal error: " + ex.getMessage());
+                    throw new PersistenceException(Colors.RED+"Fatal error: " + ex.getMessage()+Colors.RESET);
                 } catch (ManagerException ex) {
-                    System.out.println(ex.getMessage());
+                    System.out.println(Colors.RED + ex.getMessage() + Colors.RESET);
                 } catch (StucomHotelException ex) {
-                    System.out.println(ex.getMessage());
+                    System.out.println(Colors.RED + ex.getMessage() + Colors.RESET);
                 }
             }
         } catch (PersistenceException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(Colors.RED + ex.getMessage() + Colors.RESET);
         }
     }
 
@@ -83,7 +83,7 @@ public class StucomHotel {
                 creationWorker(command);
                 break;
             case "RESERVATION":
-
+                newReservation(command);
                 break;
             case "HOTEL":
                 hotel(command);
@@ -137,15 +137,32 @@ public class StucomHotel {
         if (command.length == 4) {
             String[] skillsCommand = command[3].split(",");
             for (String skill : skillsCommand) {
-                if (manager.checkServiceRoomExist(skill)) {
+                if (manager.checkSkillExist(skill)) {
                     Skills serviceCommand = Tools.converStringToEnumSkill(skill);
                     skillsWorker.add(serviceCommand);
                 }
             }
+            manager.createWorker(command[1], command[2], skillsWorker);
         } else {
             throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
-        manager.createWorker(command[1], command[2], skillsWorker);
+        
+    }
+
+    private static void newReservation(String[] command) throws InputException, ManagerException, StucomHotelException {
+        HashSet<Services> reservationRequests = new HashSet();
+        if (command.length == 4) {
+            String[] requests = command[3].split(",");
+            for (String request : requests) {
+                if (manager.checkServiceRoomExist(request)) {
+                    Services reservationRequest = Tools.converStringToEnumService(request);
+                    reservationRequests.add(reservationRequest);
+                }
+            }
+            manager.reservation(command[1], Tools.convertStringToNumber(command[2]), reservationRequests);
+        } else {
+            throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
+        }
     }
 
     private static void hotel(String[] command) throws InputException {

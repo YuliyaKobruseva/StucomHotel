@@ -8,6 +8,7 @@ import model.person.Worker;
 import model.room.Room;
 import exceptions.StucomHotelException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.TreeMap;
 import model.reservation.Reservation;
@@ -103,7 +104,8 @@ public class Manager {
         }
     }
 
-    public void createReservation(int countReservation, String dni, int numberPerson, HashSet<Services> services) throws ManagerException {
+    public void reservation(String dni, int numberPerson, HashSet<Services> services) throws ManagerException {
+        HashSet<Services> comprobar = services;
         Customer reservationCustomer;
         Room roomAvailable;
         if (customers.get(dni) != null) {
@@ -111,11 +113,13 @@ public class Manager {
         } else {
             reservationCustomer = createCustomer(dni);
         }
-
         if (checkFreeRoom(services, numberPerson) != null) {
             roomAvailable = checkFreeRoom(services, numberPerson);
-            reservations.put((Integer) countReservation, new Reservation(countReservation, reservationCustomer, roomAvailable, services, numberPerson));
+            reservations.put(countReservation, new Reservation(countReservation, reservationCustomer, roomAvailable, services, numberPerson));
+            roomAvailable.setCondition(Conditions.RESERVED);
+            System.out.println(Colors.BLUE + "--> Assigned " + dni + " to Room " + roomAvailable.getNumber() + " <--" + Colors.RESET);
         } else {
+            setMoney(getMoney() - 100);
             throw new ManagerException(ManagerException.ROOM_NOT_AVAILABLE);
         }
         countReservation++;
@@ -134,9 +138,9 @@ public class Manager {
                         }
                     });
                     workerInRoom.setNumberRoom();
-                    System.out.println("Services finished in room: " + numberRoom);
+                    System.out.println(Colors.BLUE + "Services finished in room: " + numberRoom + Colors.RESET);
                 } else {
-                    System.out.println("There aren´t workers in room");
+                    System.out.println(Colors.BLUE + "There aren´t workers in room" + Colors.RESET);
                 }
             });
         } else {
@@ -179,59 +183,63 @@ public class Manager {
 
     public void showDataOfRoomsAndWorkers() {
         if (rooms.isEmpty() && workers.isEmpty()) {
-            System.out.println("[ Information is not available ]");
+            System.out.println(Colors.BLUE + "[ Information is not available ]" + Colors.RESET);
         } else {
             if (rooms.isEmpty()) {
-                System.out.println("[ Room's information is not available ]");
+                System.out.println(Colors.BLUE + "[ Room's information is not available ]" + Colors.RESET);
             } else {
-                System.out.println("==> ROOMS <==");
-                for (Room room : rooms.values()) {
+                System.out.println(Colors.MAGENTA + "==> ROOMS <==" + Colors.RESET);
+                rooms.values().forEach((room) -> {
                     if (reservations.isEmpty()) {
-                        System.out.println("== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " " + room.getCondition() + " ==");
+                        System.out.println(Colors.MAGENTA + "== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
+                                + room.getCondition() + " ==" + Colors.RESET);
                     } else {
                         for (Reservation reservation : reservations.values()) {
                             if (room.getNumber().equalsIgnoreCase(reservation.getRoom().getNumber())) {
-                                System.out.println("== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
+                                System.out.println(Colors.MAGENTA + "== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
                                         + reservation.getCustomer().getClass().getSimpleName().toUpperCase() + ":" + reservation.getCustomer().getDNI()
-                                        + "(" + reservation.getNumberPerson() + ") ==");
+                                        + "(" + reservation.getNumberPerson() + ") ==" + Colors.RESET);
                             }
                         }
                     }
-                }
+                });
             }
             if (workers.isEmpty()) {
-                System.out.println("[ Worker's information is not available ]");
+                System.out.println(Colors.BLUE + "[ Worker's information is not available ]" + Colors.RESET);
             } else {
-                System.out.println("=======================================================");
-                System.out.println("==> WORKERS <==");
-                for (Worker worker : workers.values()) {
+                System.out.println(Colors.MAGENTA + "=======================================================" + Colors.RESET);
+                System.out.println(Colors.MAGENTA + "==> WORKERS <==" + Colors.RESET);
+                workers.values().forEach((worker) -> {
                     if (worker.getNumberRoom() == null) {
-                        System.out.println("== " + worker.getClass().getSimpleName().toUpperCase() + " " + worker.getDNI() + " " + worker.getName()
-                                + " AVAILABLE ==");
+                        System.out.println(Colors.MAGENTA + "== " + worker.getClass().getSimpleName().toUpperCase() + " " + worker.getDNI() + " " + worker.getName()
+                                + " AVAILABLE ==" + Colors.RESET);
                     } else {
-                        System.out.println("== " + worker.getClass().getSimpleName().toUpperCase() + " " + worker.getDNI() + " " + worker.getName()
-                                + " ROOM:" + worker.getNumberRoom() + " ==");
+                        System.out.println(Colors.MAGENTA + "== " + worker.getClass().getSimpleName().toUpperCase() + " " + worker.getDNI() + " " + worker.getName()
+                                + " ROOM:" + worker.getNumberRoom() + " ==" + Colors.RESET);
                     }
-                }
+                });
             }
         }
-
     }
 
     private Room checkFreeRoom(HashSet<Services> services, int numberPersons) {
         ArrayList<Room> roomsFrees = new ArrayList<>();
         Room roomFreeAvailable = null;
-        boolean containService = false;
+        
         for (Room room : rooms.values()) {
+            int containServiceCounter = 0;
             for (Services service : services) {
-                containService = room.getServices().contains(service);
+                if(room.getServices().contains(service)){
+                    containServiceCounter++;
+                }
             }
 
-            if (containService && room.getCapacity() >= numberPersons) {
+            if (containServiceCounter==services.size() && room.getCapacity() >= numberPersons && room.getCondition().toString().equalsIgnoreCase("CLEAN")) {
                 roomsFrees.add(room);
             }
         }
         if (roomsFrees.size() > 0) {
+            Collections.sort(roomsFrees);
             roomFreeAvailable = roomsFrees.get(0);
         }
         return roomFreeAvailable;
@@ -241,24 +249,27 @@ public class Manager {
         for (Services service : Services.values()) {
             if (service.toString().equals(newServiceRoom.toUpperCase())) {
                 return true;
+            }else{
+                throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
             }
-        }
-        throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
+        }        
+        return true;
     }
 
     public boolean checkSkillExist(String skillWorker) throws StucomHotelException {
-        if (Skills.valueOf(skillWorker) != null) {
+        if (Skills.valueOf(skillWorker.toUpperCase()) != null) {
             return true;
-        }
-        throw new StucomHotelException(StucomHotelException.WRONG_SKILL);
+        }else{
+            throw new StucomHotelException(StucomHotelException.WRONG_SKILL);
+        }        
     }
 
     public boolean showMoney() {
         int moneyApp = getMoney();
         if (moneyApp > 0) {
-            System.out.println("=======================================================");
-            System.out.println("==>   MONEY : " + moneyApp + " €   <==");
-            System.out.println("=======================================================");
+            System.out.println(Colors.MAGENTA + "=======================================================" + Colors.RESET);
+            System.out.println(Colors.MAGENTA + "==>   MONEY : " + moneyApp + " €   <==" + Colors.RESET);
+            System.out.println(Colors.MAGENTA + "=======================================================" + Colors.RESET);
             return false;
         } else {
             return messageLooseAllMoney(moneyApp);
@@ -268,9 +279,9 @@ public class Manager {
 
     private boolean messageLooseAllMoney(int money) {
         if (money < 0) {
-            System.out.println("=======================================================");
-            System.out.println("==========    YOU´VE LOST ALL YOUR MONEY    ===========");
-            System.out.println("=======================================================");
+            System.out.println(Colors.MAGENTA + "=======================================================" + Colors.RESET);
+            System.out.println(Colors.MAGENTA + "==========    YOU´VE LOST ALL YOUR MONEY    ===========" + Colors.RESET);
+            System.out.println(Colors.MAGENTA + "=======================================================" + Colors.RESET);
         }
         return true;
     }

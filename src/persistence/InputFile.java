@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeMap;
 import model.person.Worker;
@@ -44,7 +45,7 @@ public class InputFile {
      * @throws PersistenceException if there is some problem with files
      * @throws exceptions.InputException
      */
-    public static void readFromFile(TreeMap<String, Room> rooms, TreeMap<String, Worker> workers) throws StucomHotelException, PersistenceException, InputException {
+    public static void readFromFile(TreeMap<String, Room> rooms, HashMap<String, Worker> workers) throws StucomHotelException, PersistenceException, InputException {
         File fileData = new File(System.getProperty("user.dir") + SEPARATOR + FOLDER_DATA + SEPARATOR + "P3_load_data.txt");
         if (fileData.exists()) {
             BufferedReader br = null;

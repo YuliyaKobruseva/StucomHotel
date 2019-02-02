@@ -5,10 +5,12 @@
  */
 package model.reservation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import model.person.Customer;
 import model.room.Room;
 import model_enum.Services;
+import model_enum.Skills;
 
 /**
  *
@@ -18,17 +20,17 @@ public class Reservation {
 
     private final int numberReservation;
     private final Customer customer;
-    private final Room room;
+    private Room room;
     private final HashSet<Services> requests;
     private final int numberPerson;
-    private int additionalRequest;
+    private ArrayList<Skills> additionalRequest;
 
     /**
      * Get the value of additionalRequest
      *
      * @return the value of additionalRequest
      */
-    public int getAdditionalRequest() {
+    public ArrayList getAdditionalRequest() {
         return additionalRequest;
     }
 
@@ -37,8 +39,16 @@ public class Reservation {
      *
      * @param additionalRequest new value of additionalRequest
      */
-    public void setAdditionalRequest(int additionalRequest) {
-        this.additionalRequest = additionalRequest;
+    public void setAdditionalRequest(Skills additionalRequest) {
+        this.additionalRequest.add(additionalRequest);
+    }
+
+    /**
+     * Method removes all of the elements from this list. The list will be empty
+     * after this call returns.
+     */
+    public void clearAdditionalRequest() {
+        this.additionalRequest.clear();
     }
 
     /**
@@ -65,7 +75,7 @@ public class Reservation {
         this.room = room;
         this.requests = requests;
         this.numberPerson = numberPerson;
-        this.additionalRequest = 0;
+        this.additionalRequest = new ArrayList<>();
     }
 
     /**
@@ -93,6 +103,15 @@ public class Reservation {
      */
     public Room getRoom() {
         return room;
+    }
+
+    /**
+     * Set the value of Room
+     *
+     * @param room add new value of Room
+     */
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     /**

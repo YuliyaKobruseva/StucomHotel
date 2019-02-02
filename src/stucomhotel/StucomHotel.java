@@ -123,8 +123,8 @@ public class StucomHotel {
             }
             String[] servicesCommand = command[3].split(",");
             for (String service : servicesCommand) {
-                if (manager.checkServiceRoomExist(service)!=null) {
-                    Services serviceCommand = manager.checkServiceRoomExist(service);
+                Services serviceCommand = manager.checkServiceRoomExist(service);
+                if (serviceCommand != null) {
                     servicesRoom.add(serviceCommand);
                 }
             }
@@ -139,7 +139,7 @@ public class StucomHotel {
         if (command.length == 4) {
             String[] skillsCommand = command[3].split(",");
             for (String skill : skillsCommand) {
-                if (manager.checkSkillExist(skill)!=null) {
+                if (manager.checkSkillExist(skill) != null) {
                     Skills serviceCommand = manager.checkSkillExist(skill);
                     skillsWorker.add(serviceCommand);
                 }
@@ -156,7 +156,7 @@ public class StucomHotel {
         if (command.length == 4) {
             String[] requests = command[3].split(",");
             for (String request : requests) {
-                if (manager.checkServiceRoomExist(request)!=null) {
+                if (manager.checkServiceRoomExist(request) != null) {
                     Services reservationRequest = manager.checkServiceRoomExist(request);
                     reservationRequests.add(reservationRequest);
                 }
@@ -174,19 +174,19 @@ public class StucomHotel {
             throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);
         }
     }
-    
-    private static void request(String[] command) throws InputException, ManagerException, StucomHotelException{
-        ArrayList<Skills>requestsPending = new ArrayList<>();
+
+    private static void request(String[] command) throws InputException, ManagerException, StucomHotelException {
+        ArrayList<Skills> requestsPending = new ArrayList<>();
         if (command.length == 3) {
             String[] newRequests = command[2].split(",");
-             for (String request : newRequests) {
-                 Skills newRequest = manager.checkSkillExist(request);
-                        if(newRequest!=null){
-                            requestsPending.add(newRequest);
-                        }else{
-                            throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
-                        }
-                    }
+            for (String request : newRequests) {
+                Skills newRequest = manager.checkSkillExist(request);
+                if (newRequest != null) {
+                    requestsPending.add(newRequest);
+                } else {
+                    throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
+                }
+            }
             manager.additionalRequestRoom(command[1], requestsPending);
         } else {
             throw new InputException(InputException.WRONG_NUMBER_ARGUMENTS);

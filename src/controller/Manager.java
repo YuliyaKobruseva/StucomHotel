@@ -157,7 +157,8 @@ public class Manager {
     /**
      *
      * @param numberRoom
-     */
+     */ 
+    //modificar no funciona bien
     public void problemInRoom(String numberRoom) throws ManagerException {
         for (Room roomWithProblem : rooms.values()) {
             if (roomWithProblem.getNumber().equalsIgnoreCase(numberRoom)) {
@@ -200,7 +201,7 @@ public class Manager {
                             workerAvailable.setNumberRoom(reservation.getRoom());
                             System.out.println(Colors.BLUE + "--> Worker " + workerAvailable.getName() + " assigned to Room " + reservation.getRoom().getNumber() + " <--" + Colors.RESET);
                         } else {
-                            System.out.println(Colors.BLUE + "No Worker available for this service. Added to customer pemding request <--" + Colors.RESET);
+                            System.out.println(Colors.BLUE + "No Worker available for this service. Added to customer pending request <--" + Colors.RESET);
                         }
                     }
                 } else {
@@ -219,6 +220,7 @@ public class Manager {
     public void finishServicesRoom(String numberRoom) throws ManagerException {
         if (rooms.get(numberRoom) != null) {
             workers.values().forEach((Worker workerInRoom) -> {
+                //comprobar si numroom no es null
                 if (workerInRoom.getNumberRoom().getNumber().equalsIgnoreCase(numberRoom)) {
                     Room roomForFinish = rooms.get(numberRoom);
                     reservations.values().forEach((numReservation) -> {
@@ -247,6 +249,8 @@ public class Manager {
      * @return
      * @throws ManagerException
      */
+    
+    //hay nullPoiter
     public boolean leaveRoom(String numberRoom, int money) throws ManagerException {
         Room roomCustomer = null;
         int numberCustomerRequest = 0;
@@ -291,17 +295,20 @@ public class Manager {
                 System.out.println(Colors.BLUE + "[ Room's information is not available ]" + Colors.RESET);
             } else {
                 System.out.println(Colors.MAGENTA + "==> ROOMS <==" + Colors.RESET);
+
                 rooms.values().forEach((room) -> {
                     if (reservations.isEmpty()) {
                         System.out.println(Colors.MAGENTA + "== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
-                                + room.getCondition() + " ==" + Colors.RESET);
+                                + room.getCondition() + " ==" + Colors.RESET + "res vacio");
                     } else {
-                        for (Reservation reservation : reservations.values()) {
-                            if (room.getNumber().equalsIgnoreCase(reservation.getRoom().getNumber())) {
-                                System.out.println(Colors.MAGENTA + "== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
-                                        + reservation.getCustomer().getClass().getSimpleName().toUpperCase() + ":" + reservation.getCustomer().getDNI()
-                                        + "(" + reservation.getNumberPerson() + ") ==" + Colors.RESET);
-                            }
+                        Reservation reservation =roomExistInReservation(room);
+                        if (reservation!=null) {
+                            System.out.println(Colors.MAGENTA + "== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
+                                    + reservation.getCustomer().getClass().getSimpleName().toUpperCase() + ":" + reservation.getCustomer().getDNI()
+                                    + "(" + reservation.getNumberPerson() + ") ==" + Colors.RESET + "res no vacio");
+                        } else {
+                            System.out.println(Colors.MAGENTA + "== " + room.getClass().getSimpleName().toUpperCase() + " " + room.getNumber() + " "
+                                    + room.getCondition() + " ==" + Colors.RESET + "res no vacio pero no hay room");
                         }
                     }
                 });
@@ -359,16 +366,19 @@ public class Manager {
      *
      * @param newServiceRoom
      * @return
-     * @throws StucomHotelException
+     * @throws InputException
      */
-    public Services checkServiceRoomExist(String newServiceRoom) throws StucomHotelException, InputException {
+    public Services checkServiceRoomExist(String newServiceRoom) throws InputException, StucomHotelException {
         Services serviceExist = null;
+        boolean exist = false;
         for (Services service : Services.values()) {
-            if (service.toString().equals(newServiceRoom.toUpperCase())) {
+            if (service.toString().equalsIgnoreCase(newServiceRoom)) {
                 serviceExist = Tools.converStringToEnumService(newServiceRoom);
-            } else {
-                throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
+                exist = true;
             }
+        }
+        if (!exist) {
+            throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
         }
         return serviceExist;
     }
@@ -378,14 +388,22 @@ public class Manager {
      * @param skillWorker
      * @return
      * @throws StucomHotelException
+     * @throws exceptions.InputException
      */
     public Skills checkSkillExist(String skillWorker) throws StucomHotelException, InputException {
         Skills skillExist = null;
-        if (Skills.valueOf(skillWorker.toUpperCase()) != null) {
-            skillExist = Tools.converStringToEnumSkill(skillWorker);
-        } else {
-            throw new StucomHotelException(StucomHotelException.WRONG_SKILL);
+        boolean exist = false;
+        for (Skills skill : Skills.values()) {
+            if (skill.toString().equalsIgnoreCase(skillWorker)) {
+                skillExist = Tools.converStringToEnumSkill(skillWorker);
+                exist = true;
+            }
         }
+        if (!exist) {
+            //en mi app debe de ser WRONG_SKILL
+            throw new StucomHotelException(StucomHotelException.WRONG_SERVICE);
+        }
+
         return skillExist;
     }
 
@@ -428,5 +446,15 @@ public class Manager {
             }
         }
         return workerWithSkillAvalable;
+    }
+
+    private Reservation roomExistInReservation(Room room) {
+        Reservation reservationWithRoom = null;
+        for (Reservation reservation : reservations.values()) {
+            if (room.getNumber().equalsIgnoreCase(reservation.getRoom().getNumber())) {
+                reservationWithRoom = reservation;
+            }
+        }
+        return reservationWithRoom;
     }
 }

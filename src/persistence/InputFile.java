@@ -35,7 +35,6 @@ public class InputFile {
 //            folder.mkdir();
 //        }
 //    }
-
     /**
      * Load data from file
      *
@@ -63,7 +62,7 @@ public class InputFile {
                                     Services serviceCommand = Tools.converStringToEnumService(service);
                                     servicesRoom.add(serviceCommand);
                                 }
-                                rooms.put(data[1], new Room(data[1], Tools.convertStringToNumber(data[2]), servicesRoom));
+                                rooms.put(data[1], new Room(data[1], Tools.convertStringToNumber(data[2]), servicesRoom));                                
                                 break;
                             case "WORKER":
                                 HashSet<Skills> skillsWorker = new HashSet();
@@ -72,7 +71,7 @@ public class InputFile {
                                     Skills serviceCommand = Tools.converStringToEnumSkill(skill);
                                     skillsWorker.add(serviceCommand);
                                 }
-                                workers.put(data[1], new Worker(data[1], data[2], skillsWorker));
+                                workers.put(data[1], new Worker(data[1], data[2], skillsWorker));                                
                                 break;
                         }
 

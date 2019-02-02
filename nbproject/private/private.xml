@@ -3,11 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/tools/Tools.java</file>
             <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/model/reservation/Reservation.java</file>
             <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/stucomhotel/StucomHotel.java</file>
             <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/persistence/InputFile.java</file>
             <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/exceptions/ManagerException.java</file>
             <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/controller/Manager.java</file>
+            <file>file:/C:/Users/Yuli/Documents/NetBeansProjects/StucomHotel/src/exceptions/StucomHotelException.java</file>
         </group>
     </open-files>
 </project-private>

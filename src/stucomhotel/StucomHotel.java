@@ -47,6 +47,8 @@ public class StucomHotel {
             while (!exit) {
                 try {
                     String line = br.readLine();
+
+
                     String[] command = line.split(" ");
                     if (command.length > 0) {
                         exit = checkCommand(command);

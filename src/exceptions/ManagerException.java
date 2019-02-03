@@ -26,8 +26,8 @@ public class ManagerException extends CodeException {
             "[ Room already exist ]",
             "[ Worker already exist ]",
             "[ Customer already exist ]",
-            "[ There isn´t any room available. Customer not asigned. You´ve lost 100€ ]",
-            "[ There isn´t room with this number ]");
+            "[ There isn't any room available. Customer not asigned. You've lost 100€ ]",
+            "[ There isn't room with this number ]");
 
     public ManagerException(int code) {
         super(code);

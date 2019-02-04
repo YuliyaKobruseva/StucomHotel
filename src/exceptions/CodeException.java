@@ -6,11 +6,13 @@
 package exceptions;
 
 /**
+ * Abstract class to work with Exception with code
  *
  * @author Yuli
  */
-public class CodeException extends Exception {
-    
+public abstract class CodeException extends Exception {
+
+    // Code of exception
     private final int CODE;
 
     /**

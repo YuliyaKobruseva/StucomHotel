@@ -13,6 +13,7 @@ import model_enum.Services;
 import model_enum.Skills;
 
 /**
+ * Class to define reservation object
  *
  * @author Yuli
  */
@@ -69,6 +70,15 @@ public class Reservation {
         return numberReservation;
     }
 
+    /**
+     * Constructor of class
+     *
+     * @param numberReservation number of reservation
+     * @param customer number of customer
+     * @param room room available
+     * @param requests requests fo reservation
+     * @param numberPerson number of person with customer for reservation
+     */
     public Reservation(int numberReservation, Customer customer, Room room, HashSet<Services> requests, int numberPerson) {
         this.numberReservation = numberReservation;
         this.customer = customer;

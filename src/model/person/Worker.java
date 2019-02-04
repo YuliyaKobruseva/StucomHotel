@@ -10,6 +10,7 @@ import model.room.Room;
 import model_enum.Skills;
 
 /**
+ * Class to define worker object
  *
  * @author Yuli
  */
@@ -36,15 +37,14 @@ public class Worker extends Person {
     public void setNumberRoom(Room numberRoom) {
         this.numberRoom = numberRoom;
     }
-    
-      /**
+
+    /**
      * Set the value of numberRoom
      *
      */
     public void setNumberRoom() {
         this.numberRoom = null;
     }
-    
 
     /**
      * Get the value of skills
@@ -82,6 +82,13 @@ public class Worker extends Person {
         this.name = name;
     }
 
+    /**
+     * Constructor of class
+     *
+     * @param DNI person identifier
+     * @param name name of person
+     * @param skills skills of persoon
+     */
     public Worker(String DNI, String name, HashSet<Skills> skills) {
         super(DNI);
         this.name = name;

@@ -23,7 +23,7 @@ import tools.Tools;
 /**
  * Controller class. It is manager of app.
  *
- * @author mfontana
+ * @author Yuli
  */
 public class Manager {
 
@@ -58,7 +58,7 @@ public class Manager {
     }
 
     /**
-     * Inicializar datos
+     * Initialize data
      */
     public Manager() {
         workers = new HashMap<>();
@@ -69,21 +69,24 @@ public class Manager {
     }
 
     /**
-     * This method creates folder data if doesn't exist and load data from files
+     * This method load data from file
      *
-     * @throws exceptions.StucomHotelException
+     * @throws exceptions.StucomHotelException if any data is wrong
      * @throws PersistenceException if there is some problem with files
+     * @throws exceptions.InputException if any data is wrong
      */
     public void initData() throws StucomHotelException, PersistenceException, InputException {
         InputFile.readFromFile(rooms, workers);
     }
 
     /**
+     * This method create new room in hotel
      *
-     * @param number
-     * @param capacity
-     * @param services
-     * @throws ManagerException
+     * @param number number of room
+     * @param capacity capacity of room
+     * @param services services available in room
+     * @throws ManagerException warning message of app if there are duplicate
+     * information
      */
     public void createRoom(String number, int capacity, HashSet<Services> services) throws ManagerException {
         if (rooms.get(number) == null) {
@@ -95,11 +98,13 @@ public class Manager {
     }
 
     /**
+     * This method create a new worker in hotel
      *
-     * @param dni
-     * @param name
-     * @param skills
-     * @throws ManagerException
+     * @param dni person identifier
+     * @param name name of worker
+     * @param skills skills of worker
+     * @throws ManagerException warning message of app if there are duplicate
+     * information
      */
     public void createWorker(String dni, String name, HashSet<Skills> skills) throws ManagerException {
         if (workers.get(dni) == null) {
@@ -111,10 +116,12 @@ public class Manager {
     }
 
     /**
+     * This method create a new customer in registry of hotel
      *
-     * @param dni
-     * @return
-     * @throws ManagerException
+     * @param dni person identifier
+     * @return customer object
+     * @throws ManagerException warning message of app if there are duplicate
+     * information
      */
     public Customer createCustomer(String dni) throws ManagerException {
         if (customers.get(dni) == null) {
@@ -127,14 +134,15 @@ public class Manager {
     }
 
     /**
+     * This method create a new reservation in app
      *
-     * @param dni
-     * @param numberPerson
-     * @param services
-     * @throws ManagerException
+     * @param dni customer identifier
+     * @param numberPerson number of person for reservation
+     * @param services requests of services for reservation
+     * @throws ManagerException warning message of app if there are not
+     * available room in hotel
      */
     public void reservation(String dni, int numberPerson, HashSet<Services> services) throws ManagerException {
-        HashSet<Services> comprobar = services;
         Customer reservationCustomer;
         Room roomAvailable;
         if (customers.get(dni) != null) {
@@ -155,11 +163,12 @@ public class Manager {
     }
 
     /**
+     * This method warn about new problem in a room
      *
-     * @param numberRoom
-     * @throws exceptions.ManagerException
+     * @param numberRoom number of room with problem
+     * @throws exceptions.ManagerException warning message of app if there are
+     * not available room in hotel to assign another room for customer
      */
-    //modificar no funciona bien
     public void problemInRoom(String numberRoom) throws ManagerException {
         Room roomWithProblem = checkNumberRoom(numberRoom);
         if (roomWithProblem != null) {
@@ -186,10 +195,12 @@ public class Manager {
     }
 
     /**
+     * This method add new customer request for room
      *
-     * @param numberRoom
-     * @param requests
-     * @throws ManagerException
+     * @param numberRoom number of room for request
+     * @param requests new requests
+     * @throws ManagerException warning message of app if number of room is
+     * wrong
      */
     public void additionalRequestRoom(String numberRoom, ArrayList<Skills> requests) throws ManagerException {
         if (rooms.isEmpty()) {
@@ -218,9 +229,11 @@ public class Manager {
     }
 
     /**
+     * This method informs that requests for a room have been finalized
      *
-     * @param numberRoom
-     * @throws ManagerException
+     * @param numberRoom number of room
+     * @throws ManagerException warning message of app if number of room is
+     * wrong
      */
     public void finishServicesRoom(String numberRoom) throws ManagerException {
         int couterWorkerInRoom = 0;
@@ -253,15 +266,18 @@ public class Manager {
     }
 
     /**
+     * This method informs that a customer is leaving the hotel and check money
+     * of hotel
      *
-     * @param numberRoom
-     * @param money
-     * @return
-     * @throws ManagerException
+     * @param numberRoom customer's number of room
+     * @param money money to pay
+     * @return true if hotel lost all money
+     * @throws ManagerException warning message of app if number of room is
+     * wrong
      */
-    //hay nullPoiter
     public boolean leaveRoom(String numberRoom, int money) throws ManagerException {
         Room roomCustomer = null;
+        //quantity of additional requests
         int numberCustomerRequest = 0;
         int numberReservation = 0;
         ArrayList<Worker> workersInRoom = new ArrayList<>();
@@ -292,14 +308,14 @@ public class Manager {
             setMoney(getMoney() + money);
         } else if (workersInRoom.size() < numberCustomerRequest) {
             System.out.println("--> Unsatisfaed clients. You loose " + money / 2 + "€ <--" + Colors.RESET);
-            setMoney(getMoney() - money / 2);            
+            setMoney(getMoney() - money / 2);
             return messageLooseAllMoney(getMoney());
         }
         return false;
     }
 
     /**
-     *
+     * This method show information about rooms and workers of hotel
      */
     public void showDataOfRoomsAndWorkers() {
         if (rooms.isEmpty() && workers.isEmpty()) {
@@ -346,10 +362,14 @@ public class Manager {
     }
 
     /**
+     * This method check available room for new reservation or to assign another
+     * room in case of problem in room
      *
-     * @param services
-     * @param numberPersons
-     * @return
+     * @param services requests of reservation
+     * @param numberPersons number of person in reservation
+     * @return room object
+     * @throws ManagerException warning message of app if number of room is
+     * wrong
      */
     private Room checkFreeRoom(HashSet<Services> services, int numberPersons) throws ManagerException {
         ArrayList<Room> roomsFrees = new ArrayList<>();
@@ -377,11 +397,13 @@ public class Manager {
     }
 
     /**
+     * This method check services in room
      *
-     * @param newServiceRoom
-     * @return
-     * @throws InputException
-     * @throws exceptions.StucomHotelException
+     * @param newServiceRoom service to check
+     * @return service enum
+     * @throws InputException if any data is wrong
+     * @throws exceptions.StucomHotelException if this service doesn't exist in
+     * hotel
      */
     public Services checkServiceRoomExist(String newServiceRoom) throws InputException, StucomHotelException {
         Services serviceExist = null;
@@ -399,11 +421,12 @@ public class Manager {
     }
 
     /**
+     * This method check if exist skill in hotel
      *
      * @param skillWorker
-     * @return
-     * @throws StucomHotelException
-     * @throws exceptions.InputException
+     * @return skill enum
+     * @throws StucomHotelException if this skill doesn't exist in hotel
+     * @throws exceptions.InputException if any data is wrong
      */
     public Skills checkSkillExist(String skillWorker) throws StucomHotelException, InputException {
         Skills skillExist = null;
@@ -423,8 +446,9 @@ public class Manager {
     }
 
     /**
+     * This method show money of hotel
      *
-     * @return
+     * @return true if hotel loose all money
      */
     public boolean showMoney() {
         int moneyApp = getMoney();
@@ -435,14 +459,14 @@ public class Manager {
             return false;
         } else {
             return messageLooseAllMoney(moneyApp);
-
         }
     }
 
     /**
+     * This method show message that hotel loose all money
      *
-     * @param money
-     * @return
+     * @param money money of hotel available
+     * @return true if hotel loose all money
      */
     private boolean messageLooseAllMoney(int money) {
         if (money < 0) {
@@ -455,9 +479,10 @@ public class Manager {
     }
 
     /**
+     * This method check worker with concrete skill
      *
-     * @param skill
-     * @return
+     * @param skill skill for check
+     * @return worker object
      */
     private Worker workerWithSkill(Skills skill) {
         ArrayList<Worker> workersAvailable = new ArrayList<>();
@@ -474,9 +499,10 @@ public class Manager {
     }
 
     /**
+     * This method check if there is some reservation with concrete room
      *
-     * @param room
-     * @return
+     * @param room number of room for check
+     * @return reservation object
      */
     private Reservation roomExistInReservation(Room room) {
         Reservation reservationWithRoom = null;
@@ -491,10 +517,12 @@ public class Manager {
     }
 
     /**
+     * This method check number of room in hotel
      *
-     * @param numberRoom
-     * @return
-     * @throws ManagerException
+     * @param numberRoom number of room
+     * @return object room
+     * @throws ManagerException warning message of app if number of room is
+     * wrong
      */
     private Room checkNumberRoom(String numberRoom) throws ManagerException {
         Room roomExist = null;

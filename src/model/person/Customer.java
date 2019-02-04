@@ -6,11 +6,17 @@
 package model.person;
 
 /**
+ * Class to define customer object
  *
  * @author Yuli
  */
 public class Customer extends Person {
 
+    /**
+     * Constructor of class
+     *
+     * @param DNI person identifier
+     */
     public Customer(String DNI) {
         super(DNI);
     }

@@ -21,6 +21,7 @@ import model_enum.Services;
 import model_enum.Skills;
 
 /**
+ * Main class (View)
  *
  * @author Yuli
  */
@@ -48,7 +49,6 @@ public class StucomHotel {
                 try {
                     String line = br.readLine();
 
-
                     String[] command = line.split(" ");
                     if (command.length > 0) {
                         exit = checkCommand(command);
@@ -71,10 +71,13 @@ public class StucomHotel {
     }
 
     /**
+     * Check command of user
      *
-     * @param command
-     * @return
-     * @throws StucomHotelException
+     * @param command instruction String with command
+     * @return true if command is exist
+     * @throws StucomHotelException if data in file is wrong
+     * @throws InputExceptios if the format of command is wrong or wrong command
+     * @throws ManagerException warning message of app
      */
     private static boolean checkCommand(String[] command) throws InputException, ManagerException, StucomHotelException {
         String commandUser = command[0];
@@ -112,6 +115,14 @@ public class StucomHotel {
         return false;
     }
 
+    /**
+     * Analize command to create new room in hotel
+     *
+     * @param command command room
+     * @throws InputException if number of arguments is wrong
+     * @throws ManagerException warning message of app
+     * @throws StucomHotelException if data in file is wrong
+     */
     private static void creationRoom(String[] command) throws InputException, ManagerException, StucomHotelException {
         HashSet<Services> servicesRoom = new HashSet();
         String numberRoom;
@@ -136,6 +147,14 @@ public class StucomHotel {
         manager.createRoom(command[1], Tools.convertStringToNumber(command[2]), servicesRoom);
     }
 
+    /**
+     * Analize command about new worker in hotel
+     *
+     * @param command command worker
+     * @throws InputException if number of arguments is wrong
+     * @throws ManagerException warning message of app
+     * @throws StucomHotelException if data in file is wrong
+     */
     private static void creationWorker(String[] command) throws InputException, ManagerException, StucomHotelException {
         HashSet<Skills> skillsWorker = new HashSet();
         if (command.length == 4) {
@@ -153,6 +172,14 @@ public class StucomHotel {
 
     }
 
+    /**
+     * Analize command to new reservation in hotel
+     *
+     * @param command command reservation
+     * @throws InputException if number of arguments is wrong
+     * @throws ManagerException warning message of app
+     * @throws StucomHotelException if data in file is wrong
+     */
     private static void newReservation(String[] command) throws InputException, ManagerException, StucomHotelException {
         HashSet<Services> reservationRequests = new HashSet();
         if (command.length == 4) {
@@ -169,6 +196,13 @@ public class StucomHotel {
         }
     }
 
+    /**
+     * Analize command to create a new problem in room
+     *
+     * @param command command problem
+     * @throws InputException if number of arguments is wrong
+     * @throws ManagerException warning message of app
+     */
     private static void problem(String[] command) throws InputException, ManagerException {
         if (command.length == 2) {
             manager.problemInRoom(command[1]);
@@ -177,6 +211,14 @@ public class StucomHotel {
         }
     }
 
+    /**
+     * Analize command to new request for room
+     *
+     * @param command command request
+     * @throws ManagerException warning message of app
+     * @throws StucomHotelException if data in file is wrong
+     * @throws InputException if number of arguments is wrong
+     */
     private static void request(String[] command) throws InputException, ManagerException, StucomHotelException {
         ArrayList<Skills> requestsPending = new ArrayList<>();
         if (command.length == 3) {
@@ -195,6 +237,12 @@ public class StucomHotel {
         }
     }
 
+    /**
+     * Analize command to show data of hotel
+     *
+     * @param command command hotel
+     * @throws InputException if number of arguments is wrong
+     */
     private static void hotel(String[] command) throws InputException {
         if (command.length == 1) {
             manager.showDataOfRoomsAndWorkers();
@@ -203,6 +251,13 @@ public class StucomHotel {
         }
     }
 
+    /**
+     * Analize command to finish service in room
+     *
+     * @param command command finish
+     * @throws InputException if number of arguments is wrong
+     * @throws ManagerException warning message of app
+     */
     private static void finishService(String[] command) throws InputException, ManagerException {
         if (command.length == 2) {
             manager.finishServicesRoom(command[1]);
@@ -211,6 +266,14 @@ public class StucomHotel {
         }
     }
 
+    /**
+     * Analize command to leave a hotel
+     *
+     * @param command command leave
+     * @return true if there are not money in hotel after reservation
+     * @throws InputException if number of arguments is wrong
+     * @throws ManagerException warning message of app
+     */
     private static boolean leaveHotel(String[] command) throws InputException, ManagerException {
         if (command.length == 3) {
             return manager.leaveRoom(command[1], Tools.convertStringToNumber(command[2]));
@@ -220,6 +283,13 @@ public class StucomHotel {
 
     }
 
+    /**
+     * Analize command to show money
+     *
+     * @param command command money
+     * @return true if there are not money in hotel
+     * @throws InputException if number of arguments is wrong
+     */
     private static boolean money(String[] command) throws InputException {
         if (command.length == 1) {
             return manager.showMoney();
@@ -228,10 +298,11 @@ public class StucomHotel {
     }
 
     /**
+     * Analize command exit
      *
-     * @param command
-     * @return
-     * @throws StucomHotelException
+     * @param command command exit
+     * @return true if is okey
+     * @throws InputException if number of arguments is wrong
      */
     private static boolean exit(String[] command) throws InputException {
         if (command.length == 1) {

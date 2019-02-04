@@ -6,6 +6,7 @@
 package model_enum;
 
 /**
+ * Class with enum of colors available that allow retrieve code of color
  *
  * @author Yuli
  */

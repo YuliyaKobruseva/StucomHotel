@@ -6,15 +6,16 @@
 package model_enum;
 
 /**
+ * Class with enum skills of workers in hotel
  *
  * @author Yuli
  */
 public enum Skills {
     MANTENIMIENTO,
-    LIMPIEZA, 
+    LIMPIEZA,
     PISCINA,
-    SPA, 
-    BAR, 
+    SPA,
+    BAR,
     COMIDA,
     LAVANDERIA;
 }

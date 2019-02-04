@@ -10,6 +10,7 @@ import model_enum.Services;
 import model_enum.Conditions;
 
 /**
+ * Class to define object room
  *
  * @author Yuli
  */
@@ -65,6 +66,13 @@ public class Room implements Comparable<Room> {
         return number;
     }
 
+    /**
+     * Constructor of class
+     *
+     * @param number number of room
+     * @param capacity capacity of room
+     * @param services sercives available in room
+     */
     public Room(String number, int capacity, HashSet<Services> services) {
         this.number = number;
         this.capacity = capacity;
@@ -72,6 +80,13 @@ public class Room implements Comparable<Room> {
         this.condition = Conditions.CLEAN;
     }
 
+    /**
+     * Compares this room with the specified room for order
+     *
+     * @param room the object to be compared
+     * @return Returns a negative integer, zero, or a positive integer as this
+     * room is less than, equal to, or greater than the specified room
+     */
     @Override
     public int compareTo(Room room) {
         return Integer.compare(this.capacity, room.capacity);

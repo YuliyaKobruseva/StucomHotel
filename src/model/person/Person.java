@@ -5,9 +5,8 @@
  */
 package model.person;
 
-import model.room.Room;
-
 /**
+ * Class to define person object
  *
  * @author Yuli
  */
@@ -24,6 +23,11 @@ public abstract class Person {
         return DNI;
     }
 
+    /**
+     * Constructor of class
+     *
+     * @param DNI person identifier
+     */
     public Person(String DNI) {
         this.DNI = DNI;
     }

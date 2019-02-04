@@ -6,6 +6,7 @@
 package model_enum;
 
 /**
+ * Class with enum services available in room
  *
  * @author Yuli
  */

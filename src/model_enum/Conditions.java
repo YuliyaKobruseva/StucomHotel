@@ -6,6 +6,7 @@
 package model_enum;
 
 /**
+ * Class with enum Conditions avalaible fo room
  *
  * @author Yuli
  */

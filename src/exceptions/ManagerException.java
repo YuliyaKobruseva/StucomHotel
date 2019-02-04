@@ -9,12 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Warning mesasges of app
  *
  * @author Yuli
  */
 public class ManagerException extends CodeException {
-    // ManagerException codes
 
+// ManagerException codes
     public static final int ROOM_EXIST = 0;
     public static final int WORKER_EXIST = 1;
     public static final int CUSTOMER_EXIST = 2;

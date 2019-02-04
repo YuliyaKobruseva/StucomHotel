@@ -19,7 +19,7 @@ import tools.Tools;
 /**
  * Class to load and save data in files
  *
- * @author mfontana
+ * @author Yuli
  */
 public class InputFile {
 
@@ -27,22 +27,13 @@ public class InputFile {
     private static final String FOLDER_DATA = "datos";
 
     /**
-     * Create folder data if doesn't exist
-     */
-//    public static void createFolderData() {
-//        File folder = new File(FOLDER_DATA);
-//        if (!folder.exists()) {
-//            folder.mkdir();
-//        }
-//    }
-    /**
      * Load data from file
      *
-     * @param rooms
-     * @param workers
-     * @throws exceptions.StucomHotelException
+     * @param rooms collection of object room
+     * @param workers collection of object worker
+     * @throws exceptions.StucomHotelException if data in file is wrong
      * @throws PersistenceException if there is some problem with files
-     * @throws exceptions.InputException
+     * @throws exceptions.InputException if data in file is wrong
      */
     public static void readFromFile(TreeMap<String, Room> rooms, HashMap<String, Worker> workers) throws StucomHotelException, PersistenceException, InputException {
         File fileData = new File(System.getProperty("user.dir") + SEPARATOR + FOLDER_DATA + SEPARATOR + "P3_load_data.txt");
@@ -62,7 +53,7 @@ public class InputFile {
                                     Services serviceCommand = Tools.converStringToEnumService(service);
                                     servicesRoom.add(serviceCommand);
                                 }
-                                rooms.put(data[1], new Room(data[1], Tools.convertStringToNumber(data[2]), servicesRoom));                                
+                                rooms.put(data[1], new Room(data[1], Tools.convertStringToNumber(data[2]), servicesRoom));
                                 break;
                             case "WORKER":
                                 HashSet<Skills> skillsWorker = new HashSet();
@@ -71,7 +62,7 @@ public class InputFile {
                                     Skills serviceCommand = Tools.converStringToEnumSkill(skill);
                                     skillsWorker.add(serviceCommand);
                                 }
-                                workers.put(data[1], new Worker(data[1], data[2], skillsWorker));                                
+                                workers.put(data[1], new Worker(data[1], data[2], skillsWorker));
                                 break;
                         }
 
@@ -90,5 +81,4 @@ public class InputFile {
             }
         }
     }
-
 }
